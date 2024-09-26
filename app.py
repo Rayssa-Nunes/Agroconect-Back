@@ -5,6 +5,7 @@ from helpers.cors import cors
 
 from dotenv import load_dotenv
 import os
+import models
 
 load_dotenv()
 
