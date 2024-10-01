@@ -5,9 +5,11 @@ from .Produto import Produto
 from .Produtor import Produtor
 from .Setor import Setor
 from .ProdutorFeira import ProdutorFeira
+from .Usuario import Usuario
 
 
 __all__ = {
+    "Usuario",
     "Cliente",
     "Endereco",
     "Feira",

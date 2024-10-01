@@ -1,6 +1,7 @@
 from flask_restful import fields
 from helpers.database import db
-from hash import gera_senha_hash, verifica_senha_hash
+from hash import gera_senha_hash
+from .Usuario import Usuario
 
 produtor_fields = {
     'id': fields.Integer,
@@ -12,27 +13,20 @@ produtor_fields = {
     'email': fields.String,
 }
 
-class Produtor(db.Model):
+class Produtor(Usuario):
     __tablename__ = 'tb_produtor'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nome = db.Column(db.String(255), nullable=False)
-    cpf = db.Column(db.String(11), unique=True, nullable=False)
+    id = db.Column(db.Integer, db.ForeignKey('tb_usuario.id'), primary_key=True)
     cnpj = db.Column(db.String(14), unique=True, nullable=False)
-    nascimento = db.Column(db.Date)
     propriedade = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    senha = db.Column(db.String(255), nullable=False)
-    endereco_id = db.Column(db.Integer, db.ForeignKey('tb_endereco.id'))
 
-    endereco = db.relationship('Endereco', backref='produtor')
     feira = db.relationship('Feira', secondary='tb_produtor_feira', backref='produtor')
 
-    def __init__(self, nome, cpf, cnpj, nascimento, propriedade, email, senha):
-        self.nome = nome
-        self.cpf = cpf
+    __mapper_args__ = {
+        'polymorphic_identity': 'produtor',
+    }
+
+    def __init__(self, nome, cpf, nascimento, email, senha, cnpj, propriedade):
+        super().__init__(nome=nome, cpf=cpf, nascimento=nascimento, email=email, senha=senha, tipo='produtor')
         self.cnpj = cnpj
-        self.nascimento = nascimento
         self.propriedade = propriedade
-        self.email = email
-        self.senha = gera_senha_hash(senha)

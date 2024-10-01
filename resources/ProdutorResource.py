@@ -1,4 +1,3 @@
-from flask import request
 from flask_restful import Resource, reqparse, marshal
 from models.Produtor import Produtor, produtor_fields
 from helpers.database import db
@@ -80,7 +79,7 @@ class ProdutorResource(Resource):
             if args['email']:
                 produtor.email = args['email']
             if args['senha']:
-                produtor.senha = args['senha']
+                produtor.senha = gera_senha_hash(args['senha'])
             
             db.session.commit()
             return {'message': 'Produtor alterado com sucesso'}, 201

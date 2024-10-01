@@ -1,6 +1,7 @@
 from flask_restful import fields
 from helpers.database import db
 from hash import gera_senha_hash, verifica_senha_hash
+from .Usuario import Usuario
 
 cliente_fields = {
     'id': fields.Integer,
@@ -10,24 +11,15 @@ cliente_fields = {
     'email': fields.String,
 }
 
-class Cliente(db.Model):
+class Cliente(Usuario):
     __tablename__ = 'tb_cliente'
+    
+    id = db.Column(db.Integer, db.ForeignKey('tb_usuario.id'), primary_key=True)
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nome = db.Column(db.String(255), nullable=False)
-    cpf = db.Column(db.String(11), unique=True, nullable=False)
-    nascimento = db.Column(db.Date)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    senha = db.Column(db.String(255), nullable=False)
-    endereco_id = db.Column(db.Integer, db.ForeignKey('tb_endereco.id'))
-
-    endereco = db.relationship('Endereco', backref='cliente')
+    __mapper_args__ = {
+        'polymorphic_identity': 'cliente',
+    }
 
     def __init__(self, nome, cpf, nascimento, email, senha):
-        self.nome = nome
-        self.cpf = cpf
-        self.nascimento = nascimento
-        self.email = email
-        self.senha = gera_senha_hash(senha)
-
+        super().__init__(nome=nome, cpf=cpf, nascimento=nascimento, email=email, senha=senha, tipo='cliente')
 

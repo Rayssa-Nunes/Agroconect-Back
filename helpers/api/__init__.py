@@ -10,6 +10,8 @@ from resources.ProdutorResource import ProdutoresResource, ProdutorResource
 from resources.SetorResource import SetorResource
 from resources.LoginResource import LoginResource
 
+from resources.UsuarioResource import UsuariosResource
+
 
 blueprint = Blueprint('api', __name__)
 api = Api(blueprint, prefix='/api')
@@ -27,3 +29,5 @@ api.add_resource(ProdutorResource, '/produtor/<int:id>')
 
 api.add_resource(SetorResource, '/setor')
 api.add_resource(LoginResource, '/login')
+
+api.add_resource(UsuariosResource, '/usuarios')

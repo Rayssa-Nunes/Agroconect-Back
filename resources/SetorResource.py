@@ -1,4 +1,3 @@
-from flask import request
 from flask_restful import Resource, marshal_with, reqparse
 from models.Setor import Setor, setor_fields
 from helpers.database import db

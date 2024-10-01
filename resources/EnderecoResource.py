@@ -1,4 +1,3 @@
-from flask import request
 from flask_restful import Resource, marshal_with, reqparse
 from models import Endereco
 from models.Endereco import endereco_fields

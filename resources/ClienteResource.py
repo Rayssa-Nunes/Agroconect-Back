@@ -8,7 +8,7 @@ from helpers.database import db
 class ClientesResource(Resource):
     parser = reqparse.RequestParser()
     def __init__(self):
-        self.parser.add_argument('nome', type=str, help='Erro no campo nome', required=True)
+        self.parser.add_argument('nome', type=str, help='Erro no campo nome')
         self.parser.add_argument('cpf', type=str, help='Erro no campo cpf', required=True)
         self.parser.add_argument('nascimento', type=str, help='Erro no campo nascimento', required=True)
         self.parser.add_argument('email', type=str, help='Erro no campo email', required=True)
@@ -70,7 +70,7 @@ class ClienteResource(Resource):
             if args['email']:
                 cliente.email = args['email']
             if args['senha']:
-                cliente.senha = args['senha']
+                cliente.senha = gera_senha_hash(args['senha'])
             
             db.session.commit()
             return {'message': 'Cliente alterado com sucesso'}, 201

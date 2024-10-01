@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse, marshal
 from helpers.database import db
 from models.Cliente import Cliente, cliente_fields
 from models.Produtor import Produtor, produtor_fields
+from models.Usuario import Usuario
 from hash import gera_senha_hash, verifica_senha_hash
 
 class LoginResource(Resource):
@@ -13,23 +14,23 @@ class LoginResource(Resource):
     def post(self):
         args = self.parser.parse_args()
         email = args["email"]
-        senha = gera_senha_hash(args["senha"])
+        senha = args["senha"]
         try:
-            cliente = Cliente.query.filter_by(email=email).first()
-            if cliente:
-                if verifica_senha_hash(cliente.senha, senha):
-                    return marshal(cliente, cliente_fields), 200
-                else:
-                    return {'message': 'Senha incorreta para o cliente'}, 401
-                
-            produtor = Produtor.query.filter_by(email=email).first()
-            if produtor:
-                if verifica_senha_hash(produtor.senha, senha):
-                    return marshal(produtor, produtor_fields), 200
-                else:
-                    return {'message': 'Senha incorreta para o produtor'}, 401
-                
-            return {'message': 'Usuário não encontrado'}, 404
+            usuario = Usuario.query.filter_by(email=email).first()
+            if not usuario:
+                return {'message': 'Usuário não encontrado'}, 404
+            
+            if not verifica_senha_hash(usuario.senha, senha):
+                return {'message': 'Senha incorreta'}, 401
+            
+            if usuario.tipo == 'cliente':
+                cliente = Cliente.query.filter_by(id=usuario.id).first()
+                return marshal(cliente, cliente_fields), 200
+            if usuario.tipo == 'produtor':
+                produtor = Produtor.query.filter_by(id=usuario.id).first()
+                return marshal(produtor, produtor_fields), 200
+            else:
+                return {'message': 'Tipo de usuário desconhecido'}, 400
         except Exception as e:
             db.session.rollback()
             return {'message': str(e)}, 500
