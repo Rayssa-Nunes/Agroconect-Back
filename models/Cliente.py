@@ -1,6 +1,5 @@
 from flask_restful import fields
 from helpers.database import db
-from hash import gera_senha_hash, verifica_senha_hash
 from .Usuario import Usuario
 
 cliente_fields = {
@@ -20,6 +19,6 @@ class Cliente(Usuario):
         'polymorphic_identity': 'cliente',
     }
 
-    def __init__(self, nome, cpf, nascimento, email, senha):
-        super().__init__(nome=nome, cpf=cpf, nascimento=nascimento, email=email, senha=senha, tipo='cliente')
+    def __init__(self, nome, cpf, nascimento, email, senha, endereco_id):
+        super().__init__(nome=nome, cpf=cpf, nascimento=nascimento, email=email, senha=senha, endereco_id=endereco_id, tipo='cliente')
 

@@ -1,6 +1,5 @@
 from flask_restful import fields
 from helpers.database import db
-from hash import gera_senha_hash
 
 usuario_fields = {
     'id': fields.Integer,
@@ -29,10 +28,11 @@ class Usuario(db.Model):
         'polymorphic_on': tipo,
     }
 
-    def __init__(self, nome, cpf, nascimento, email, senha, tipo):
+    def __init__(self, nome, cpf, nascimento, email, senha, tipo, endereco_id):
         self.nome = nome
         self.cpf = cpf
         self.nascimento = nascimento
         self.email = email
-        self.senha = gera_senha_hash(senha)
+        self.senha = senha
         self.tipo = tipo
+        self.endereco_id = endereco_id

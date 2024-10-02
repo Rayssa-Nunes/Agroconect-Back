@@ -11,8 +11,8 @@ class EnderecoResource(Resource):
         self.parser.add_argument('estado', type=str, help='Informe o campo "Estado"', required=True)
         self.parser.add_argument('cep', type=str, help='Informe o campo "Cep"', required=True)
         self.parser.add_argument('complemento', type=str, help='Informe o campo "Cep"')
-        self.parser.add_argument('latitude', type=int, help='Informe o campo "Latitude"', required=True)
-        self.parser.add_argument('longitude', type=int, help='Informe o campo "Longitude"', required=True)
+        self.parser.add_argument('latitude', type=float, help='Informe o campo "Latitude"', required=True)
+        self.parser.add_argument('longitude', type=float, help='Informe o campo "Longitude"', required=True)
 
     @marshal_with(endereco_fields)
     def get(self):

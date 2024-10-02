@@ -1,6 +1,5 @@
 from flask_restful import fields
 from helpers.database import db
-from hash import gera_senha_hash
 from .Usuario import Usuario
 
 produtor_fields = {
@@ -26,7 +25,7 @@ class Produtor(Usuario):
         'polymorphic_identity': 'produtor',
     }
 
-    def __init__(self, nome, cpf, nascimento, email, senha, cnpj, propriedade):
-        super().__init__(nome=nome, cpf=cpf, nascimento=nascimento, email=email, senha=senha, tipo='produtor')
+    def __init__(self, nome, cpf, nascimento, email, senha, cnpj, propriedade, endereco_id):
+        super().__init__(nome=nome, cpf=cpf, nascimento=nascimento, email=email, senha=senha, endereco_id=endereco_id, tipo='produtor')
         self.cnpj = cnpj
         self.propriedade = propriedade

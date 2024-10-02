@@ -6,7 +6,7 @@ class ProdutoResource(Resource):
     parser = reqparse.RequestParser()
     def __init__(self):
         self.parser.add_argument('nome', type=str, help='Erro no campo nome', required=True)
-        self.parser.add_argument('preco', type=int, help='Erro no campo preço', required=True)
+        self.parser.add_argument('preco', type=float, help='Erro no campo preço', required=True)
         self.parser.add_argument('descricao', type=str, help='Erro no campo descrição')
         self.parser.add_argument('imagem', type=str, help='Erro no campo imagem')
 

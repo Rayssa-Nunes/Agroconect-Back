@@ -25,10 +25,12 @@ class LoginResource(Resource):
             
             if usuario.tipo == 'cliente':
                 cliente = Cliente.query.filter_by(id=usuario.id).first()
-                return marshal(cliente, cliente_fields), 200
+                # return marshal(cliente, cliente_fields), 200
+                return {'message': 'Login realizado com sucesso'}, 200
             if usuario.tipo == 'produtor':
                 produtor = Produtor.query.filter_by(id=usuario.id).first()
-                return marshal(produtor, produtor_fields), 200
+                # return marshal(produtor, produtor_fields), 200
+                return {'message': 'Login realizado com sucesso'}, 200
             else:
                 return {'message': 'Tipo de usuário desconhecido'}, 400
         except Exception as e:

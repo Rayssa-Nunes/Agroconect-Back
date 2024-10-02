@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse, marshal
 from models.Usuario import Usuario, usuario_fields
 from models.Cliente import Cliente
 from models.Produtor import Produtor
+from models.Endereco import Endereco
 from helpers.database import db
 from hash import gera_senha_hash
 
@@ -17,7 +18,15 @@ class UsuariosResource(Resource):
         self.parser.add_argument('propriedade', type=str, help='Erro no campo propriedade')
         self.parser.add_argument('email', type=str, help='Erro no campo email')
         self.parser.add_argument('senha', type=str, help='Erro no campo senha')
-        self.parser.add_argument('tipo', type=str, help='Erro no campo tipo')
+        self.parser.add_argument('tipo', type=str, help='Erro no campo tipo', required=True)
+
+        self.parser.add_argument('rua', type=str, help='Informe o campo "Rua"', required=True)
+        self.parser.add_argument('numero', type=int, help='Informe o campo "Número"', required=True)
+        self.parser.add_argument('estado', type=str, help='Informe o campo "Estado"', required=True)
+        self.parser.add_argument('cep', type=str, help='Informe o campo "Cep"', required=True)
+        self.parser.add_argument('complemento', type=str, help='Informe o campo "Cep"')
+        self.parser.add_argument('latitude', type=float, help='Informe o campo "Latitude"', required=True)
+        self.parser.add_argument('longitude', type=float, help='Informe o campo "Longitude"', required=True)
 
     def get(self):
         usuarios = Usuario.query.all()
@@ -27,6 +36,19 @@ class UsuariosResource(Resource):
         args = self.parser.parse_args()
         tipo = args['tipo']
         try:
+
+            novo_endereco = Endereco(
+                rua=args['rua'],
+                numero=args['numero'],
+                estado=args['estado'],
+                cep=args['cep'],
+                complemento=args['complemento'],
+                latitude=args['latitude'],
+                longitude=args['longitude']
+            )
+            db.session.add(novo_endereco)
+            db.session.flush()
+
             senha_hash = gera_senha_hash(args['senha'])
 
             if tipo == 'cliente':
@@ -36,6 +58,7 @@ class UsuariosResource(Resource):
                 nascimento = args['nascimento'],
                 email = args['email'],
                 senha = senha_hash,
+                endereco_id = novo_endereco.id,
                 )
 
                 db.session.add(novo_cliente)
@@ -49,9 +72,9 @@ class UsuariosResource(Resource):
                     nascimento = args['nascimento'],
                     email = args['email'],
                     senha = senha_hash,
-
                     cnpj=args['cnpj'],
-                    propriedade=args['propriedade']
+                    propriedade=args['propriedade'],
+                    endereco_id = novo_endereco.id
                 )
 
                 db.session.add(novo_produtor)

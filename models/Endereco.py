@@ -8,8 +8,8 @@ endereco_fields = {
     'estado': fields.String,
     'cep': fields.String,
     'complemento': fields.String,
-    'latitude': fields.Integer,
-    'longitude': fields.Integer,
+    'latitude': fields.Float,
+    'longitude': fields.Float,
 }
 
 class Endereco(db.Model):
@@ -21,8 +21,8 @@ class Endereco(db.Model):
     estado = db.Column(db.String(80), nullable=False)
     cep = db.Column(db.String(8), nullable=False)
     complemento = db.Column(db.String(255))
-    latitude = db.Column(db.Integer, nullable=False)
-    longitude = db.Column(db.Integer, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
 
     def __init__(self, rua, numero, estado, cep, complemento, latitude, longitude):
         self.rua = rua
